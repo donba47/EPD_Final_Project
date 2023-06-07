@@ -38,12 +38,9 @@
 #include "./image/display_2.h"
 
 /* ESP8266 part(start) */
-void ESP8266_Init();    // ??��?? ESP8266 (?��?��RST Pin)
-void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data);    // ?��??4條AT??�令
+void ESP8266_Init();
+void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data);
 int32_t checkBufferCharacters(uint8_t* buffer, const char* targetString);
-// ?��來�?��?��?��?�陣??�中??�內�??????
-// ，是?��跟targetString�??????�??????
-// ，是??�傳1，否??�傳0
 /* ESP8266 part(end) */
 
 /* USER CODE END Includes */
@@ -81,20 +78,20 @@ char at_inst2[16];
 uint8_t at_inst4[]="AT+CIPCLOSE\r\n";
 
 #define BUFFER_SIZE 64
-uint8_t rx_buffer_init[128];   //reset後AT??�令??�傳??��?�息buffer
-uint8_t rx_buffer1[BUFFER_SIZE];    //1st AT??�令??�傳??��?�息buffer
-uint8_t rx_buffer2[BUFFER_SIZE];    //2nd AT??�令??�傳??��?�息buffer
-uint8_t rx_buffer3[BUFFER_SIZE];    //3th AT??�令??�傳??��?�息buffer
-uint8_t rx_buffer4[BUFFER_SIZE];    //4th AT??�令??�傳??��?�息buffer
+uint8_t rx_buffer_init[128];
+uint8_t rx_buffer1[BUFFER_SIZE];
+uint8_t rx_buffer2[BUFFER_SIZE];
+uint8_t rx_buffer3[BUFFER_SIZE];
+uint8_t rx_buffer4[BUFFER_SIZE];
 
-//?��ESP8266死�?�跳?��?��，當ESP8266�??????確�?��?��?�set 1，否???0 -> 跳脫
+
 int32_t init_receive_ok=0;
 int32_t inst1_receive_ok=0;
 int32_t inst2_receive_ok=0;
 int32_t inst3_receive_ok=0;
 int32_t inst4_receive_ok=0;
 
-int32_t timeout=0;    //記數?��(每�?��?�令?��?�失??��?��?�都??��?�傳五次)
+int32_t timeout=0;
 
 /* ESP8266 part(end) */
 
@@ -375,40 +372,40 @@ void ESP8266_Init(){
 
     while(init_receive_ok!=1){
 
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);    //讓RST Pin = Low
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
 	HAL_Delay(1000);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_SET);    //讓RST Pin = High
-	HAL_UART_Receive(&huart1, rx_buffer_init, sizeof(rx_buffer_init)-1, 1000);    //Reset 後接?��ESP01??�傳??��?�息
-	init_receive_ok=checkBufferCharacters(rx_buffer_init, "SystemReady");//?�� Reset 後接?��??��?�息?��"SystemReady"，init_receive_ok=1，跳?��迴�??
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_SET);
+	HAL_UART_Receive(&huart1, rx_buffer_init, sizeof(rx_buffer_init)-1, 1000);
+	init_receive_ok=checkBufferCharacters(rx_buffer_init, "SystemReady");
 	}
 }
 
 void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
-    //??��?��?��?�傳ok??��?�數
+
     inst1_receive_ok=0;
     inst2_receive_ok=0;
     inst3_receive_ok=0;
     inst4_receive_ok=0;
     HAL_Delay(5000);
 
-    /*?���?????? 1st AT ??�令*/
-    timeout=0;    //??�傳計數�??????0
-    while(inst1_receive_ok==0 && timeout<=5){    //?��??5次�?�直?��ESP01??��?�正�??????
+
+    timeout=0;
+    while(inst1_receive_ok==0 && timeout<=5){
 	HAL_UART_Transmit(&huart1, at_inst1, sizeof(at_inst1) - 1, 1000);
 	HAL_UART_Receive(&huart1, rx_buffer1, sizeof(rx_buffer1)-1, 1000);
 	inst1_receive_ok = checkBufferCharacters(rx_buffer1, "Linked")||checkBufferCharacters(rx_buffer1, "CONNECT");
 	HAL_Delay(3000);
 	timeout++;
     }
-    if(inst1_receive_ok!=1){    //如�?�傳??5次都失�?��?�直?��跳出ESP8266_SendData?���??????
+    if(inst1_receive_ok!=1){
     	BSP_LCD_DrawRect(215,233,20,20);
     	BSP_LCD_SetTextColor(LCD_COLOR_RED);
     	BSP_LCD_FillRect(215,233,20,20);
     	return;
     }
-    /*?���?????? 1st AT ??�令*/
 
-    /*組�?? 3rd AT ??�令*/
+
+
     uint8_t sensor1_name[]="&field1=";
     uint8_t sensor2_name[]="&field2=";
     uint8_t at_inst3_temp1[]="GET /update?api_key=V8CUO3DJT76JJ3XW";
@@ -418,17 +415,17 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     at_inst3_length=0;
     inst3_length=0;
     at_inst3_length = strlen((const char*)at_inst3_temp1) + strlen((const char*)sensor1_name) + strlen((const char*)&sensor1_data)+ strlen((const char*)sensor2_name) + strlen((const char*)&sensor2_data)+4;    //計�?�inst3??��?�串總長度�??+4?��\r\n
-    uint8_t at_inst3[at_inst3_length];    //�????????��??��?�inst3字串?��度�?�好??��?��?�陣???
+    uint8_t at_inst3[at_inst3_length];
 
     sprintf((char*)at_inst3,"GET /update?api_key=V8CUO3DJT76JJ3XW%s%d%s%d\r\n",(char*)sensor1_name,sensor1_data,(char*)sensor2_name,sensor2_data);    //組�?�inst3
-    /*組�?? 3rd AT ??�令*/
 
-    /*組�?? 2rd AT ??�令*/
-    inst3_length = strlen((char*)at_inst3);    //計�?��?��?��?�inst3??�總?���??????
-    sprintf(at_inst2, "AT+CIPSEND=%d\r\n",inst3_length);  //組�?�inst2
-    /*組�?? 2rd AT ??�令*/
 
-    /*?��?? 2rd AT ??�令*/
+
+    inst3_length = strlen((char*)at_inst3);
+    sprintf(at_inst2, "AT+CIPSEND=%d\r\n",inst3_length);
+
+
+
     timeout=0;
     while(inst2_receive_ok==0 && timeout<=5){
     HAL_UART_Transmit(&huart1, (uint8_t*)at_inst2, sizeof(at_inst2) - 1, 1000);
@@ -444,9 +441,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     	return;
     }
     HAL_Delay(1000);
-    /*?��?? 2rd AT ??�令*/
 
-    /*?��?? 3th AT ??�令*/
+
+
     timeout=0;
     while(inst3_receive_ok==0 && timeout<=5)
     {
@@ -471,9 +468,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     }
 
     HAL_Delay(1000);
-    /*?��?? 3th AT ??�令*/
 
-    /*?��?? 4th AT ??�令*/
+
+
     timeout=0;
     while(inst4_receive_ok==0 && timeout<=5){
 	HAL_UART_Transmit(&huart1, (uint8_t*)at_inst4, sizeof(at_inst4) - 1, 1000);
@@ -486,9 +483,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
 	return;
 	}
     HAL_Delay(1000);
-    /*?��?? 4th AT ??�令*/
 
-    /*清空?��?��??�令??�buffer*/
+
+
     memset(rx_buffer1, 0, sizeof(rx_buffer1));
     memset(rx_buffer2, 0, sizeof(rx_buffer2));
     memset(rx_buffer3, 0, sizeof(rx_buffer3));
@@ -517,7 +514,7 @@ int32_t checkBufferCharacters(uint8_t* buffer, const char* targetString){
 /* DHT22 part(start) */
 void delay (uint16_t time)
 {
-	/* change your code here for the delay in microseconds */
+
 	__HAL_TIM_SET_COUNTER(&htim6, 0);
 	while ((__HAL_TIM_GET_COUNTER(&htim6))<time);
 }
@@ -543,12 +540,12 @@ void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 
 void DHT22_Start (void)
 {
-	Set_Pin_Output (DHT22_PORT, DHT22_PIN);  // set the pin as output
-	HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 0);   // pull the pin low
-	delay (1200);   // wait for 18ms
-    HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 1);   // pull the pin high
-	delay (20);   // wait for 20us
-	Set_Pin_Input(DHT22_PORT, DHT22_PIN);    // set as input
+	Set_Pin_Output (DHT22_PORT, DHT22_PIN);
+	HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 0);
+	delay (1200);
+    HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 1);
+	delay (20);
+	Set_Pin_Input(DHT22_PORT, DHT22_PIN);
 }
 
 uint8_t DHT22_Check_Response (void)
@@ -563,7 +560,7 @@ uint8_t DHT22_Check_Response (void)
 	    if ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN))==1)
 	    	 Response = 1;
 
-	    else Response = -1; // 255
+	    else Response = -1;
 	}
 	else
 	{
@@ -577,17 +574,17 @@ uint8_t DHT22_Check_Response (void)
  uint8_t DHT22_Read (void)
 {
     uint8_t i,j;
-    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));   // wait for the pin to go low
+    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
     for (j=0;j<8;j++)
     {
-	    while (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));   // wait for the pin to go high
-	    delay (40);   // wait for 40 us
-	    if (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)))   // if the pin is low
+	    while (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
+	    delay (40);
+	    if (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)))
 	{
-		i&= ~(1<<(7-j));   // write 0
+		i&= ~(1<<(7-j));
 	}
-	    else i|= (1<<(7-j));  // if the pin is high, write 1
-    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));  // wait for the pin to go low
+	    else i|= (1<<(7-j));
+    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
     }
     return i;
 }

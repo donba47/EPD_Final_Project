@@ -41,11 +41,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_line   000245e0  00000000  00000000  000c33ce  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000ef449  00000000  00000000  000e79ae  2**0
+ 19 .debug_str    000ef462  00000000  00000000  000e79ae  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  001d6df7  2**0
+ 20 .comment      00000050  00000000  00000000  001d6e10  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00007908  00000000  00000000  001d6e48  2**2
+ 21 .debug_frame  00007908  00000000  00000000  001d6e60  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2891,7 +2891,7 @@ void ESP8266_Init(){
     while(init_receive_ok!=1){
  80015b0:	e01d      	b.n	80015ee <ESP8266_Init+0x52>
 
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);    //讓RST Pin = Low
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
  80015b2:	2200      	movs	r2, #0
  80015b4:	f44f 5180 	mov.w	r1, #4096	; 0x1000
  80015b8:	4812      	ldr	r0, [pc, #72]	; (8001604 <ESP8266_Init+0x68>)
@@ -2899,18 +2899,18 @@ void ESP8266_Init(){
 	HAL_Delay(1000);
  80015be:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  80015c2:	f000 feb1 	bl	8002328 <HAL_Delay>
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_SET);    //讓RST Pin = High
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_SET);
  80015c6:	2201      	movs	r2, #1
  80015c8:	f44f 5180 	mov.w	r1, #4096	; 0x1000
  80015cc:	480d      	ldr	r0, [pc, #52]	; (8001604 <ESP8266_Init+0x68>)
  80015ce:	f001 fefb 	bl	80033c8 <HAL_GPIO_WritePin>
-	HAL_UART_Receive(&huart1, rx_buffer_init, sizeof(rx_buffer_init)-1, 1000);    //Reset 後接?��ESP01??�傳??��?�息
+	HAL_UART_Receive(&huart1, rx_buffer_init, sizeof(rx_buffer_init)-1, 1000);
  80015d2:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
  80015d6:	227f      	movs	r2, #127	; 0x7f
  80015d8:	4908      	ldr	r1, [pc, #32]	; (80015fc <ESP8266_Init+0x60>)
  80015da:	480b      	ldr	r0, [pc, #44]	; (8001608 <ESP8266_Init+0x6c>)
  80015dc:	f004 ff51 	bl	8006482 <HAL_UART_Receive>
-	init_receive_ok=checkBufferCharacters(rx_buffer_init, "SystemReady");//?�� Reset 後接?��??��?�息?��"SystemReady"，init_receive_ok=1，跳?��迴�??
+	init_receive_ok=checkBufferCharacters(rx_buffer_init, "SystemReady");
  80015e0:	490a      	ldr	r1, [pc, #40]	; (800160c <ESP8266_Init+0x70>)
  80015e2:	4806      	ldr	r0, [pc, #24]	; (80015fc <ESP8266_Init+0x60>)
  80015e4:	f000 fa3a 	bl	8001a5c <checkBufferCharacters>
@@ -2944,7 +2944,7 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  800161c:	80fb      	strh	r3, [r7, #6]
  800161e:	4613      	mov	r3, r2
  8001620:	80bb      	strh	r3, [r7, #4]
-    //??��?��?��?�傳ok??��?�數
+
     inst1_receive_ok=0;
  8001622:	4bbb      	ldr	r3, [pc, #748]	; (8001910 <ESP8266_SendData+0x300>)
  8001624:	2200      	movs	r2, #0
@@ -2965,12 +2965,12 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  800163a:	f241 3088 	movw	r0, #5000	; 0x1388
  800163e:	f000 fe73 	bl	8002328 <HAL_Delay>
 
-    /*?���?????? 1st AT ??�令*/
-    timeout=0;    //??�傳計數�??????0
+
+    timeout=0;
  8001642:	4bb7      	ldr	r3, [pc, #732]	; (8001920 <ESP8266_SendData+0x310>)
  8001644:	2200      	movs	r2, #0
  8001646:	601a      	str	r2, [r3, #0]
-    while(inst1_receive_ok==0 && timeout<=5){    //?��??5次�?�直?��ESP01??��?�正�??????
+    while(inst1_receive_ok==0 && timeout<=5){
  8001648:	e029      	b.n	800169e <ESP8266_SendData+0x8e>
 	HAL_UART_Transmit(&huart1, at_inst1, sizeof(at_inst1) - 1, 1000);
  800164a:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
@@ -3011,7 +3011,7 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  8001698:	3301      	adds	r3, #1
  800169a:	4aa1      	ldr	r2, [pc, #644]	; (8001920 <ESP8266_SendData+0x310>)
  800169c:	6013      	str	r3, [r2, #0]
-    while(inst1_receive_ok==0 && timeout<=5){    //?��??5次�?�直?��ESP01??��?�正�??????
+    while(inst1_receive_ok==0 && timeout<=5){
  800169e:	4b9c      	ldr	r3, [pc, #624]	; (8001910 <ESP8266_SendData+0x300>)
  80016a0:	681b      	ldr	r3, [r3, #0]
  80016a2:	2b00      	cmp	r3, #0
@@ -3021,7 +3021,7 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  80016aa:	2b05      	cmp	r3, #5
  80016ac:	ddcd      	ble.n	800164a <ESP8266_SendData+0x3a>
     }
-    if(inst1_receive_ok!=1){    //如�?�傳??5次都失�?��?�直?��跳出ESP8266_SendData?���??????
+    if(inst1_receive_ok!=1){
  80016ae:	4b98      	ldr	r3, [pc, #608]	; (8001910 <ESP8266_SendData+0x300>)
  80016b0:	681b      	ldr	r3, [r3, #0]
  80016b2:	2b01      	cmp	r3, #1
@@ -3044,9 +3044,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     	return;
  80016d4:	e1a8      	b.n	8001a28 <ESP8266_SendData+0x418>
     }
-    /*?���?????? 1st AT ??�令*/
 
-    /*組�?? 3rd AT ??�令*/
+
+
     uint8_t sensor1_name[]="&field1=";
  80016d6:	4a99      	ldr	r2, [pc, #612]	; (800193c <ESP8266_SendData+0x32c>)
  80016d8:	f107 0340 	add.w	r3, r7, #64	; 0x40
@@ -3121,7 +3121,7 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  8001772:	3304      	adds	r3, #4
  8001774:	b29b      	uxth	r3, r3
  8001776:	f8a7 3056 	strh.w	r3, [r7, #86]	; 0x56
-    uint8_t at_inst3[at_inst3_length];    //�????????��??��?�inst3字串?��度�?�好??��?��?�陣???
+    uint8_t at_inst3[at_inst3_length];
  800177a:	f9b7 1056 	ldrsh.w	r1, [r7, #86]	; 0x56
  800177e:	466b      	mov	r3, sp
  8001780:	461c      	mov	r4, r3
@@ -3167,23 +3167,23 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
  80017ea:	4957      	ldr	r1, [pc, #348]	; (8001948 <ESP8266_SendData+0x338>)
  80017ec:	6cf8      	ldr	r0, [r7, #76]	; 0x4c
  80017ee:	f006 fde1 	bl	80083b4 <siprintf>
-    /*組�?? 3rd AT ??�令*/
 
-    /*組�?? 2rd AT ??�令*/
-    inst3_length = strlen((char*)at_inst3);    //計�?��?��?��?�inst3??�總?���??????
+
+
+    inst3_length = strlen((char*)at_inst3);
  80017f2:	6cf8      	ldr	r0, [r7, #76]	; 0x4c
  80017f4:	f7fe fcfc 	bl	80001f0 <strlen>
  80017f8:	4603      	mov	r3, r0
  80017fa:	f8a7 3054 	strh.w	r3, [r7, #84]	; 0x54
-    sprintf(at_inst2, "AT+CIPSEND=%d\r\n",inst3_length);  //組�?�inst2
+    sprintf(at_inst2, "AT+CIPSEND=%d\r\n",inst3_length);
  80017fe:	f9b7 3054 	ldrsh.w	r3, [r7, #84]	; 0x54
  8001802:	461a      	mov	r2, r3
  8001804:	4951      	ldr	r1, [pc, #324]	; (800194c <ESP8266_SendData+0x33c>)
  8001806:	4852      	ldr	r0, [pc, #328]	; (8001950 <ESP8266_SendData+0x340>)
  8001808:	f006 fdd4 	bl	80083b4 <siprintf>
-    /*組�?? 2rd AT ??�令*/
 
-    /*?��?? 2rd AT ??�令*/
+
+
     timeout=0;
  800180c:	4b44      	ldr	r3, [pc, #272]	; (8001920 <ESP8266_SendData+0x310>)
  800180e:	2200      	movs	r2, #0
@@ -3254,9 +3254,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     HAL_Delay(1000);
  8001888:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  800188c:	f000 fd4c 	bl	8002328 <HAL_Delay>
-    /*?��?? 2rd AT ??�令*/
 
-    /*?��?? 3th AT ??�令*/
+
+
     timeout=0;
  8001890:	4b23      	ldr	r3, [pc, #140]	; (8001920 <ESP8266_SendData+0x310>)
  8001892:	2200      	movs	r2, #0
@@ -3374,9 +3374,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     HAL_Delay(1000);
  800198c:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  8001990:	f000 fcca 	bl	8002328 <HAL_Delay>
-    /*?��?? 3th AT ??�令*/
 
-    /*?��?? 4th AT ??�令*/
+
+
     timeout=0;
  8001994:	4b28      	ldr	r3, [pc, #160]	; (8001a38 <ESP8266_SendData+0x428>)
  8001996:	2200      	movs	r2, #0
@@ -3431,9 +3431,9 @@ void ESP8266_SendData(int16_t sensor1_data,int16_t sensor2_data) {
     HAL_Delay(1000);
  80019f0:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  80019f4:	f000 fc98 	bl	8002328 <HAL_Delay>
-    /*?��?? 4th AT ??�令*/
 
-    /*清空?��?��??�令??�buffer*/
+
+
     memset(rx_buffer1, 0, sizeof(rx_buffer1));
  80019f8:	2240      	movs	r2, #64	; 0x40
  80019fa:	2100      	movs	r1, #0
@@ -3561,7 +3561,7 @@ void delay (uint16_t time)
  8001acc:	af00      	add	r7, sp, #0
  8001ace:	4603      	mov	r3, r0
  8001ad0:	80fb      	strh	r3, [r7, #6]
-	/* change your code here for the delay in microseconds */
+
 	__HAL_TIM_SET_COUNTER(&htim6, 0);
  8001ad2:	4b09      	ldr	r3, [pc, #36]	; (8001af8 <delay+0x30>)
  8001ad4:	681b      	ldr	r3, [r3, #0]
@@ -3668,27 +3668,27 @@ void DHT22_Start (void)
 {
  8001b74:	b580      	push	{r7, lr}
  8001b76:	af00      	add	r7, sp, #0
-	Set_Pin_Output (DHT22_PORT, DHT22_PIN);  // set the pin as output
+	Set_Pin_Output (DHT22_PORT, DHT22_PIN);
  8001b78:	2108      	movs	r1, #8
  8001b7a:	480d      	ldr	r0, [pc, #52]	; (8001bb0 <DHT22_Start+0x3c>)
  8001b7c:	f7ff ffbe 	bl	8001afc <Set_Pin_Output>
-	HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 0);   // pull the pin low
+	HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 0);
  8001b80:	2200      	movs	r2, #0
  8001b82:	2108      	movs	r1, #8
  8001b84:	480a      	ldr	r0, [pc, #40]	; (8001bb0 <DHT22_Start+0x3c>)
  8001b86:	f001 fc1f 	bl	80033c8 <HAL_GPIO_WritePin>
-	delay (1200);   // wait for 18ms
+	delay (1200);
  8001b8a:	f44f 6096 	mov.w	r0, #1200	; 0x4b0
  8001b8e:	f7ff ff9b 	bl	8001ac8 <delay>
-    HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 1);   // pull the pin high
+    HAL_GPIO_WritePin (DHT22_PORT, DHT22_PIN, 1);
  8001b92:	2201      	movs	r2, #1
  8001b94:	2108      	movs	r1, #8
  8001b96:	4806      	ldr	r0, [pc, #24]	; (8001bb0 <DHT22_Start+0x3c>)
  8001b98:	f001 fc16 	bl	80033c8 <HAL_GPIO_WritePin>
-	delay (20);   // wait for 20us
+	delay (20);
  8001b9c:	2014      	movs	r0, #20
  8001b9e:	f7ff ff93 	bl	8001ac8 <delay>
-	Set_Pin_Input(DHT22_PORT, DHT22_PIN);    // set as input
+	Set_Pin_Input(DHT22_PORT, DHT22_PIN);
  8001ba2:	2108      	movs	r1, #8
  8001ba4:	4802      	ldr	r0, [pc, #8]	; (8001bb0 <DHT22_Start+0x3c>)
  8001ba6:	f7ff ffc7 	bl	8001b38 <Set_Pin_Input>
@@ -3738,7 +3738,7 @@ uint8_t DHT22_Check_Response (void)
  8001bea:	71fb      	strb	r3, [r7, #7]
  8001bec:	e00a      	b.n	8001c04 <DHT22_Check_Response+0x50>
 
-	    else Response = -1; // 255
+	    else Response = -1;
  8001bee:	23ff      	movs	r3, #255	; 0xff
  8001bf0:	71fb      	strb	r3, [r7, #7]
  8001bf2:	e007      	b.n	8001c04 <DHT22_Check_Response+0x50>
@@ -3782,7 +3782,7 @@ uint8_t DHT22_Check_Response (void)
  8001c26:	b082      	sub	sp, #8
  8001c28:	af00      	add	r7, sp, #0
     uint8_t i,j;
-    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));   // wait for the pin to go low
+    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
  8001c2a:	bf00      	nop
  8001c2c:	2108      	movs	r1, #8
  8001c2e:	4824      	ldr	r0, [pc, #144]	; (8001cc0 <DHT22_Read+0x9c>)
@@ -3795,7 +3795,7 @@ uint8_t DHT22_Check_Response (void)
  8001c3c:	71bb      	strb	r3, [r7, #6]
  8001c3e:	e037      	b.n	8001cb0 <DHT22_Read+0x8c>
     {
-	    while (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));   // wait for the pin to go high
+	    while (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
  8001c40:	bf00      	nop
  8001c42:	2108      	movs	r1, #8
  8001c44:	481e      	ldr	r0, [pc, #120]	; (8001cc0 <DHT22_Read+0x9c>)
@@ -3803,10 +3803,10 @@ uint8_t DHT22_Check_Response (void)
  8001c4a:	4603      	mov	r3, r0
  8001c4c:	2b00      	cmp	r3, #0
  8001c4e:	d0f8      	beq.n	8001c42 <DHT22_Read+0x1e>
-	    delay (40);   // wait for 40 us
+	    delay (40);
  8001c50:	2028      	movs	r0, #40	; 0x28
  8001c52:	f7ff ff39 	bl	8001ac8 <delay>
-	    if (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)))   // if the pin is low
+	    if (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)))
  8001c56:	2108      	movs	r1, #8
  8001c58:	4819      	ldr	r0, [pc, #100]	; (8001cc0 <DHT22_Read+0x9c>)
  8001c5a:	f001 fb9d 	bl	8003398 <HAL_GPIO_ReadPin>
@@ -3814,7 +3814,7 @@ uint8_t DHT22_Check_Response (void)
  8001c60:	2b00      	cmp	r3, #0
  8001c62:	d10e      	bne.n	8001c82 <DHT22_Read+0x5e>
 	{
-		i&= ~(1<<(7-j));   // write 0
+		i&= ~(1<<(7-j));
  8001c64:	79bb      	ldrb	r3, [r7, #6]
  8001c66:	f1c3 0307 	rsb	r3, r3, #7
  8001c6a:	2201      	movs	r2, #1
@@ -3828,7 +3828,7 @@ uint8_t DHT22_Check_Response (void)
  8001c7e:	71fb      	strb	r3, [r7, #7]
  8001c80:	e00b      	b.n	8001c9a <DHT22_Read+0x76>
 	}
-	    else i|= (1<<(7-j));  // if the pin is high, write 1
+	    else i|= (1<<(7-j));
  8001c82:	79bb      	ldrb	r3, [r7, #6]
  8001c84:	f1c3 0307 	rsb	r3, r3, #7
  8001c88:	2201      	movs	r2, #1
@@ -3838,7 +3838,7 @@ uint8_t DHT22_Check_Response (void)
  8001c94:	4313      	orrs	r3, r2
  8001c96:	b25b      	sxtb	r3, r3
  8001c98:	71fb      	strb	r3, [r7, #7]
-    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));  // wait for the pin to go low
+    while ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
  8001c9a:	bf00      	nop
  8001c9c:	2108      	movs	r1, #8
  8001c9e:	4808      	ldr	r0, [pc, #32]	; (8001cc0 <DHT22_Read+0x9c>)
@@ -4955,103 +4955,46 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
  80021ec:	40020000 	.word	0x40020000
 
 080021f0 <Reset_Handler>:
-
-    .section  .text.Reset_Handler
-  .weak  Reset_Handler
-  .type  Reset_Handler, %function
-Reset_Handler: 
-  ldr   sp, =_estack       /* set stack pointer */
  80021f0:	f8df d034 	ldr.w	sp, [pc, #52]	; 8002228 <LoopFillZerobss+0x12>
- 
-/* Copy the data segment initializers from flash to SRAM */  
-  ldr r0, =_sdata
  80021f4:	480d      	ldr	r0, [pc, #52]	; (800222c <LoopFillZerobss+0x16>)
-  ldr r1, =_edata
  80021f6:	490e      	ldr	r1, [pc, #56]	; (8002230 <LoopFillZerobss+0x1a>)
-  ldr r2, =_sidata
  80021f8:	4a0e      	ldr	r2, [pc, #56]	; (8002234 <LoopFillZerobss+0x1e>)
-  movs r3, #0
  80021fa:	2300      	movs	r3, #0
-  b LoopCopyDataInit
  80021fc:	e002      	b.n	8002204 <LoopCopyDataInit>
 
 080021fe <CopyDataInit>:
-
-CopyDataInit:
-  ldr r4, [r2, r3]
  80021fe:	58d4      	ldr	r4, [r2, r3]
-  str r4, [r0, r3]
  8002200:	50c4      	str	r4, [r0, r3]
-  adds r3, r3, #4
  8002202:	3304      	adds	r3, #4
 
 08002204 <LoopCopyDataInit>:
-
-LoopCopyDataInit:
-  adds r4, r0, r3
  8002204:	18c4      	adds	r4, r0, r3
-  cmp r4, r1
  8002206:	428c      	cmp	r4, r1
-  bcc CopyDataInit
  8002208:	d3f9      	bcc.n	80021fe <CopyDataInit>
-  
-/* Zero fill the bss segment. */
-  ldr r2, =_sbss
  800220a:	4a0b      	ldr	r2, [pc, #44]	; (8002238 <LoopFillZerobss+0x22>)
-  ldr r4, =_ebss
  800220c:	4c0b      	ldr	r4, [pc, #44]	; (800223c <LoopFillZerobss+0x26>)
-  movs r3, #0
  800220e:	2300      	movs	r3, #0
-  b LoopFillZerobss
  8002210:	e001      	b.n	8002216 <LoopFillZerobss>
 
 08002212 <FillZerobss>:
-
-FillZerobss:
-  str  r3, [r2]
  8002212:	6013      	str	r3, [r2, #0]
-  adds r2, r2, #4
  8002214:	3204      	adds	r2, #4
 
 08002216 <LoopFillZerobss>:
-
-LoopFillZerobss:
-  cmp r2, r4
  8002216:	42a2      	cmp	r2, r4
-  bcc FillZerobss
  8002218:	d3fb      	bcc.n	8002212 <FillZerobss>
-
-/* Call the clock system initialization function.*/
-  bl  SystemInit   
  800221a:	f7ff ff0d 	bl	8002038 <SystemInit>
-/* Call static constructors */
-    bl __libc_init_array
  800221e:	f006 f89d 	bl	800835c <__libc_init_array>
-/* Call the application's entry point.*/
-  bl  main
  8002222:	f7fe fee1 	bl	8000fe8 <main>
-  bx  lr    
  8002226:	4770      	bx	lr
-  ldr   sp, =_estack       /* set stack pointer */
  8002228:	20030000 	.word	0x20030000
-  ldr r0, =_sdata
  800222c:	20000000 	.word	0x20000000
-  ldr r1, =_edata
  8002230:	2000010c 	.word	0x2000010c
-  ldr r2, =_sidata
  8002234:	080576c4 	.word	0x080576c4
-  ldr r2, =_sbss
  8002238:	2000010c 	.word	0x2000010c
-  ldr r4, =_ebss
  800223c:	20000834 	.word	0x20000834
 
 08002240 <ADC_IRQHandler>:
- * @retval None       
-*/
-    .section  .text.Default_Handler,"ax",%progbits
-Default_Handler:
-Infinite_Loop:
-  b  Infinite_Loop
  8002240:	e7fe      	b.n	8002240 <ADC_IRQHandler>
 	...
 

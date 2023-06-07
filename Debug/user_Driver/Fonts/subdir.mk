@@ -27,13 +27,13 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-user_Driver/Fonts/%.o user_Driver/Fonts/%.su user_Driver/Fonts/%.cyclo: ../user_Driver/Fonts/%.c user_Driver/Fonts/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../user_Driver -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+user_Driver/Fonts/%.o user_Driver/Fonts/%.su: ../user_Driver/Fonts/%.c user_Driver/Fonts/subdir.mk
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../user_Driver -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 clean: clean-user_Driver-2f-Fonts
 
 clean-user_Driver-2f-Fonts:
-	-$(RM) ./user_Driver/Fonts/font12.cyclo ./user_Driver/Fonts/font12.d ./user_Driver/Fonts/font12.o ./user_Driver/Fonts/font12.su ./user_Driver/Fonts/font16.cyclo ./user_Driver/Fonts/font16.d ./user_Driver/Fonts/font16.o ./user_Driver/Fonts/font16.su ./user_Driver/Fonts/font20.cyclo ./user_Driver/Fonts/font20.d ./user_Driver/Fonts/font20.o ./user_Driver/Fonts/font20.su ./user_Driver/Fonts/font24.cyclo ./user_Driver/Fonts/font24.d ./user_Driver/Fonts/font24.o ./user_Driver/Fonts/font24.su ./user_Driver/Fonts/font8.cyclo ./user_Driver/Fonts/font8.d ./user_Driver/Fonts/font8.o ./user_Driver/Fonts/font8.su
+	-$(RM) ./user_Driver/Fonts/font12.d ./user_Driver/Fonts/font12.o ./user_Driver/Fonts/font12.su ./user_Driver/Fonts/font16.d ./user_Driver/Fonts/font16.o ./user_Driver/Fonts/font16.su ./user_Driver/Fonts/font20.d ./user_Driver/Fonts/font20.o ./user_Driver/Fonts/font20.su ./user_Driver/Fonts/font24.d ./user_Driver/Fonts/font24.o ./user_Driver/Fonts/font24.su ./user_Driver/Fonts/font8.d ./user_Driver/Fonts/font8.o ./user_Driver/Fonts/font8.su
 
 .PHONY: clean-user_Driver-2f-Fonts
 
