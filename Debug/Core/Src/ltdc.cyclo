@@ -1,0 +1,3 @@
+ltdc.c:35:6:MX_LTDC_Init	5
+ltdc.c:144:6:HAL_LTDC_MspInit	3
+ltdc.c:263:6:HAL_LTDC_MspDeInit	2

@@ -1,0 +1,3 @@
+../Core/Src/ltdc.c:35:6:MX_LTDC_Init	64	static
+../Core/Src/ltdc.c:144:6:HAL_LTDC_MspInit	112	static
+../Core/Src/ltdc.c:263:6:HAL_LTDC_MspDeInit	16	static
