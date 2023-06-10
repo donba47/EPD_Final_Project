@@ -28,7 +28,7 @@
         > * 正確傳送後，ESP的回應：
         > OK
         > Linked
-        ![alt text](https://hackmd.io/_uploads/S1YGFgqHh.png)
+        
      2. `AT+CIPSEND=xx`
         > * 告知要傳送請求的資料長度：xx(位元，含空白)
         > * 總字元長度必須恰恰好, 多跟少都不行
