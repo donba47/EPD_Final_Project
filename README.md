@@ -63,7 +63,4 @@
               ![](https://hackmd.io/_uploads/HynSvg9Hn.png)
             * Data "1"：==**70 us**== 的 HIGH
               ![](https://hackmd.io/_uploads/HkoFDe9S3.png)
-
-*    資料格式：
-        ![](https://hackmd.io/_uploads/ByubcxqBh.png)
 ---
