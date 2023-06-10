@@ -1,5 +1,10 @@
 # EPD_Final_Project
 
+##    目標
+
+1.    接收來自 **DHT22** 的溫溼度資料
+    
+2.    利用 **Wi-Fi IoT控制晶片 ESP8266 (a.k.a ESP-01)** ，將溫溼度資料上傳到 **IoT Server ( ThingSpeak )** 上。
 
 ##    Pin assignment
 
