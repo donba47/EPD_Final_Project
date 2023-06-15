@@ -552,22 +552,18 @@ uint8_t DHT22_Check_Response (void)
 {
     uint8_t Response = 0;
     timeout_DHT=0;
-    while(Response==0 && timeout_DHT<5){
-	if ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN))==0)
-	{
-            delay (80);
+    delay (40);
+	if ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN))==0){
 
-	    if ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN))==1)
-	    	 Response = 1;
+            delay (40);
 
-	    else Response = -1;
+	    if ((HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN))==1){
+	    	Response = 1;
+	    	delay (80);
+	    }
+	    else Response = -1; // 255
 	}
-	else
-	{
-		delay (5);
-		timeout_DHT++;
-	}
-    }
+
     return Response;
 }
 
@@ -578,7 +574,7 @@ uint8_t DHT22_Check_Response (void)
     for (j=0;j<8;j++)
     {
 	    while (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)));
-	    delay (40);
+	    delay (50);
 	    if (!(HAL_GPIO_ReadPin (DHT22_PORT, DHT22_PIN)))
 	{
 		i&= ~(1<<(7-j));
