@@ -249,7 +249,7 @@ int main(void)
 	  HAL_Delay(1500);
 	  DHT22_Start();
 	  Presence = DHT22_Check_Response();
-	  if (Presence == 0)
+	  if (Presence!=1)
 	  {
 		  HAL_Delay(3000);
 		  timeout_DHT=0;
